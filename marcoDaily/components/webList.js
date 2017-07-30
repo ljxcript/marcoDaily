@@ -7,9 +7,9 @@ import {StyleSheet,
         Image,
         DrawerLayoutAndroid,
         TouchableOpacity,
-        ToastAndroid } from 'react-native';
+        ToastAndroid,
+        AsyncStorage } from 'react-native';
 
-import {NavigationBar} from 'teaset';
 import cheerio from 'cheerio-without-node-native';
 
 
@@ -79,6 +79,7 @@ export default class Home extends React.Component{
 	}
 
 	render() {
+		AsyncStorage.clear();
 		let newsArray = this.state.dataSource? this.state.dataSource:[];
 		newsArray = newsArray.map((ele, index)=>{
 			return Object.assign(ele, {key: ele.id || index}); //keys...

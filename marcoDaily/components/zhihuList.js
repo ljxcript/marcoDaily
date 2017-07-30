@@ -8,7 +8,6 @@ import {StyleSheet,
          TouchableOpacity,
          ToastAndroid } from 'react-native';
 
-import {NavigationBar} from 'teaset';
 import Banner from 'react-native-banner';
 import LoadingAnimation from '../components/loadingAnimation.js';
 

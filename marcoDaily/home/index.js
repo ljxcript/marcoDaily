@@ -37,7 +37,7 @@ export default class Home extends React.Component{
 	menuProccessing(pageId) {
 
 		if (pageId == 0) {
-			this.props.navigation.navigate('collection', {type: 'zhihu', id: key? key : '9542062', info: {},url: url? url : 'http://www.163.com' })
+			this.props.navigation.navigate('collection', {type: 'zhihu', id:  '9542062', info: {},url:  'http://www.163.com' })
 
 		}
 		if (pageId == 1){

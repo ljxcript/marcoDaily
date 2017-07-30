@@ -56,16 +56,30 @@ export default class Detail extends React.Component{
 
 		let collectionOfDate = AsyncStorage.getItem('collections', (err, result)=>{
 			if (err) {
-				AsyncStorage.setItem('collections', {dateS: [{url: url, title: info.title, image: info.image}]})
+				ToastAndroid.show('收藏失败', ToastAndroid.SHORT);
 			} else {
-				if (result.hasOwnProperty(dateS)) {
-					result[dateS].push({url: url, title: info.title, image: info.image});
+				if (result === null) {
+					AsyncStorage.setItem('collections', JSON.stringify({[dateS]: [{url: url, title: info.title, image: info.image}]}), (err)=>{
+
+					}).then(()=>{
+						ToastAndroid.show('已加入收藏列表', ToastAndroid.SHORT);
+						
+					})
 				} else {
-					result[dateS] = [{url: url, title: info.title, image: info.image}]
+					result = JSON.parse(result);
+					if (result.hasOwnProperty(dateS)) {
+						result[dateS].push({url: url, title: info.title, image: info.image});
+					} else {
+						result[dateS] = [{url: url, title: info.title, image: info.image}]
+					}
+					AsyncStorage.setItem('collections', JSON.stringify(result), (err)=>{
+
+					}).then(()=>{
+						ToastAndroid.show('已加入收藏列表', ToastAndroid.SHORT);
+
+					})
 				}
-				AsyncStorage.setItem('collections', result)
 			}
-			ToastAndroid.show('已加入收藏列表', ToastAndroid.SHORT);
 		})
 
 	}

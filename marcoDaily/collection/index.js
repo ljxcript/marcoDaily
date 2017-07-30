@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, FlatList,TouchableNativeFeedback, Image, Touchab
 import {NavigationBar} from 'teaset';
 import Banner from 'react-native-banner';
 import LoadingAnimation from '../components/loadingAnimation.js';
-
+import CollectionList from '../components/collectionList.js';
 import {URL} from '../config'
 
 export default class ZhihuList extends React.Component{
@@ -17,7 +17,12 @@ export default class ZhihuList extends React.Component{
 		}
 
 	}
-
+	static navigationOptions = {
+		header: null
+	}
+	back = () => {
+		this.props.navigation.goBack();
+	}	
 	navToDetail(key, type, url){
 		this.props.navigation.navigate('detail', {type: type? type: 'zhihu', id: key? key : '9542062', url: url? url : 'http://www.163.com'})
 	}
@@ -25,11 +30,11 @@ export default class ZhihuList extends React.Component{
 
 	requestFromStorage() {
 		AsyncStorage.getItem('collections', (err, result)=> {
-			if (err) {
+			if (err || result === null) {
 				ToastAndroid.show('没有发现收藏记录', ToastAndroid.SHORT);
 			} else {
 				this.setState({
-					dataSource: result,
+					dataSource: JSON.parse(result),
 					pageType: 'collections'
 				})
 			}	
@@ -76,42 +81,11 @@ export default class ZhihuList extends React.Component{
 				<FlatList style={styles.list}
 					data={dataArray} 
 					renderItem={({item}) => {
-						let listItemView;
-						listItemView = (
-							<View>
-							<Text style={{color: 'grey',fontSize: 17}}>{item.date}</Text>
-							<FlatList 
-								data={item.data}
-								renderItem={({it}) => {
-									if (it.length > 1) {
-										return (
-											<View style={{margin: 5, padding: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-												<View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.2)', flexDirection: 'column'}}>
-													<Image source={{uri: it[0].image}} style={styles.listItemImg} />
-													<Text  style={styles.listItemText}>{it[0].title}</Text>
-													<Text>{'来自知乎日报'}</Text>
-												</View>
-												<View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.2)', flexDirection: 'column'}}>
-													<Image source={{uri: it[1].image}} style={styles.listItemImg} />
-													<Text  style={styles.listItemText}>{it[1].title}</Text>
-													<Text>{'来自知乎日报'}</Text>
-												</View>											
-											</View>
-										) 
-									} else {
-										return (
-											<View style={{padding: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-												<View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.2)',flexDirection: 'column'}}>
-													<Image source={{uri: it[0].image}} style={styles.listItemImg} />
-													<Text  style={styles.listItemText}>{it[0].title}</Text>
-													<Text >{'来自知乎日报'}</Text>
-												</View>
-												<View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.2)',flexDirection: 'column'}}>
-												</View>											
-											</View>
-										)
-									}	
-								}}
+						let listItemView = (
+							<View style={{padding: 10, backgroundColor: 'white', elevation: 10}}>
+								<Text style={{color: 'grey',fontSize: 17}}>{item.date}</Text>
+								<CollectionList collectionList={item.data}/>
+							</View>
 						)
 						return listItemView;
 					}}
@@ -119,13 +93,32 @@ export default class ZhihuList extends React.Component{
 			)
 		}
 
-		return pageView;
+		return (
+			<View style={styles.detailContainer}>
+				<NavigationBar  style={{height: 50}}
+					leftView={
+						<TouchableOpacity onPress={this.back} >
+							<View style={styles.back}>
+							  <Text style={styles.backText}>返回</Text>
+							</View>
+						</TouchableOpacity>
+					}
+
+				/>
+				{pageView}
+			</View>
+		)
+		
 	}
 }
 
 
 const styles = StyleSheet.create({
-
+	homeContainer: {
+		flexDirection: 'column',
+		flex: 1,
+		backgroundColor: 'lightgrey'
+	},
 	list: {
 		marginTop: 50
 	},
@@ -147,6 +140,18 @@ const styles = StyleSheet.create({
     	flex: 2,
     	height: 80,
     	width: 80
+    },
+    back: {
+    	padding: 5,
+    	flexDirection: 'row',
+    	justifyContent: 'center',
+    	height: 50,
+    	alignItems: 'center',
+    	width: 100
+    },
+    backText: {
+    	color: 'white',
+    	fontSize: 14
     }
 
 })
