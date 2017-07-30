@@ -3,15 +3,17 @@ import {StackNavigator} from 'react-navigation';
 
 import Detail from './detail';
 import Home from './home';
-import Menu from './menu';
-
+import Collection from './collection';
 const MarcoDaily = StackNavigator({
 	home: {
 		screen: Home
 	},
 	detail: {
 		screen: Detail,
-		path: ':type/:id/:url'
+		path: ':type/:id/:url/:info'
+	},
+	collection: {
+		screen: Collection
 	}
 	
 })

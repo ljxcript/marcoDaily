@@ -1,5 +1,12 @@
 import React, {Component}from 'react';
-import {StyleSheet, Text, View, FlatList,TouchableNativeFeedback, Image, TouchableOpacity, ToastAndroid} from 'react-native';
+import {StyleSheet,
+         Text,
+         View,
+         FlatList,
+         TouchableNativeFeedback,
+         Image,
+         TouchableOpacity,
+         ToastAndroid } from 'react-native';
 
 import {NavigationBar} from 'teaset';
 import Banner from 'react-native-banner';
@@ -19,8 +26,8 @@ export default class ZhihuList extends React.Component{
 
 	}
 
-	navToDetail(key, type, url){
-		this.props.navigation.navigate('detail', {type: 'zhihu', id: key? key : '9542062', url: url? url : 'http://www.163.com'})
+	navToDetail(key, type,  info, url){
+		this.props.navigation.navigate('detail', {type: 'zhihu', id: key? key : '9542062', info: info,url: url? url : 'http://www.163.com' })
 	}
 
 
@@ -76,7 +83,7 @@ export default class ZhihuList extends React.Component{
 							)
 						} else {
 							listItemView = (
-								<TouchableNativeFeedback background={TouchableNativeFeedback.SelectableBackground()} onPress={()=>this.navToDetail(item.id, 'zhihu')}>
+								<TouchableNativeFeedback background={TouchableNativeFeedback.SelectableBackground()} onPress={()=>this.navToDetail(item.id, 'zhihu', {title: item.title, image: (item.images)[0]})}>
 									<View key={item.key}  style={styles.listItem}>
 										<Text  style={styles.listItemText}>{item.title}</Text>
 										<Image source={{uri: (item.images)[0]}} style={styles.listItemImg} />

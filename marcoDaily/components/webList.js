@@ -1,5 +1,13 @@
 import React, {Component}from 'react';
-import {StyleSheet, Text, View, FlatList,TouchableNativeFeedback, Image, DrawerLayoutAndroid, TouchableOpacity, ToastAndroid} from 'react-native';
+import {StyleSheet,
+        Text,
+        View,
+        FlatList,
+        TouchableNativeFeedback,
+        Image,
+        DrawerLayoutAndroid,
+        TouchableOpacity,
+        ToastAndroid } from 'react-native';
 
 import {NavigationBar} from 'teaset';
 import cheerio from 'cheerio-without-node-native';

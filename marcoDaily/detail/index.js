@@ -1,5 +1,15 @@
 import React, {Component}from 'react';
-import {WebView, StyleSheet, Text, View, FlatList, Image, DrawerLayoutAndroid, TouchableOpacity,ToastAndroid} from 'react-native';
+import { 
+      	WebView, 
+      	StyleSheet,
+      	Text,
+      	View,
+      	FlatList,
+      	Image,
+      	DrawerLayoutAndroid,
+      	TouchableOpacity,
+      	ToastAndroid,
+      	AsyncStorage } from 'react-native';
 
 import { NavigationBar, Input, Overlay, Label} from 'teaset';
 import { NavigationActions} from 'react-navigation';
@@ -36,9 +46,28 @@ export default class Detail extends React.Component{
 		)
 	}
 
-	addToCollection(){
+	addToCollection(url, info){
 		this.setState({showCommentInput: false, like: true});
-		ToastAndroid.show('已加入收藏列表', ToastAndroid.SHORT);
+
+		let date = new Date();
+		let dateS = `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`;
+
+
+
+		let collectionOfDate = AsyncStorage.getItem('collections', (err, result)=>{
+			if (err) {
+				AsyncStorage.setItem('collections', {dateS: [{url: url, title: info.title, image: info.image}]})
+			} else {
+				if (result.hasOwnProperty(dateS)) {
+					result[dateS].push({url: url, title: info.title, image: info.image});
+				} else {
+					result[dateS] = [{url: url, title: info.title, image: info.image}]
+				}
+				AsyncStorage.setItem('collections', result)
+			}
+			ToastAndroid.show('已加入收藏列表', ToastAndroid.SHORT);
+		})
+
 	}
 
 	componentDidMount() {
@@ -72,7 +101,7 @@ export default class Detail extends React.Component{
 					</TouchableOpacity>
 				}
 				rightView={
-					<TouchableOpacity onPress={()=>this.addToCollection()} style={styles.back} >
+					<TouchableOpacity onPress={()=>this.addToCollection(WEB_URL, state.params.info)} style={styles.back} >
 						<View >
 						  <Text style={styles.backText}>{this.state.like? '已收藏':'收藏'}</Text>
 						</View>
